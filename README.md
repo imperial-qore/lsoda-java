@@ -16,19 +16,15 @@ mvn clean package
 ```
 If you are using IntelliJ IDEA, you can generate the package through this IDE. See the details [here](UseJarInIDEA.md).
 
-Now create a new new java project and create a folder *lib*
-
-<img src="./data/readme/create_lib_folder.png" width="30%" alt="">
-
-Copy the generated jar file to this folder
+Copy the generated jar file to the folder *lib*.
 
 <img src="./data/readme/copy_jar.png" width="30%" alt="">
 
-Open the **Project Stucture** and add this jar file in the **Libraries**
+Open the **Project Stucture** and add this jar file in the **Libraries**.
 
 <img src="./data/readme/add_lib.png" width="30%" alt="">
 
-Then add the Apache Commons Math dependency in *pom.xml*
+Then add the Apache Commons Math dependency in *pom.xml*.
 
 ```xml
 <dependency>
@@ -40,7 +36,7 @@ Then add the Apache Commons Math dependency in *pom.xml*
 
 ### Solving ODEs
 Then you can use the package to calculate IVPs. Here is an example for integrating:
-y' = 12y. The integration interval is [0,2]
+y' = 12y. The integration interval is [0,2].
 
 ```java
 import org.apache.commons.math3.exception.DimensionMismatchException;

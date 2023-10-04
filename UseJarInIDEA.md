@@ -10,3 +10,9 @@ First, just click the _package_ button.
 Then you can find the file *lsoda-1.0.jar* in the folder *target*.
 
 <img src="./data/readme/jar_pkg.png" width="30%" alt="">
+
+Now create a new java project and create a folder *lib*.
+
+<img src="./data/readme/create_lib_folder.png" width="30%" alt="">
+
+The next steps can continue to refer to [README.md](README.md).
