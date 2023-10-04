@@ -5,7 +5,7 @@ Java implementation of the LSODA stiff ODE solver
 This the Java implementation of the algorithm LSODA. The original algorithm can be accessed [here](https://epubs.siam.org/doi/abs/10.1137/0904010).
 It can be used to solve the non-stiff and stiff ordinary differential equations (ODEs).
 
-This Java version LSODA is ported from the [C version LSODA](http://www.ccl.net/cca/software/SOURCES/C/kinetics2/lsoda-dir/index.shtml).
+This Java version LSODA is ported from the [C version of LSODA](http://www.ccl.net/cca/software/SOURCES/C/kinetics2/lsoda-dir/index.shtml).
 
 ## Usage
 ### Generating and importing the jar file
@@ -73,7 +73,7 @@ public class Main {
 }
 ```
 
-For more examples, users can refer to *lsoda/test/odesolver/StiffExamplesTest.java*, which includes the stiff examples from the paper [Comparing numerical methods for stiff systems of ODEs](https://link.springer.com/article/10.1007/BF01932994).
+For more examples, users can refer to *test/odesolver/StiffExamplesTest.java*, which includes the stiff examples from the paper [Comparing numerical methods for stiff systems of ODEs](https://link.springer.com/article/10.1007/BF01932994).
 
 Furthermore, this implementation retains the original input parameters. If you wish to further configure the solver, you can invoke the following method:
 ```java
@@ -119,4 +119,4 @@ public class Main {
 ```
 More examples of using this calling method can be found in test/odesolver/ITaskAndContinuationTest.java.
 
-For more detailed description and meaning of these parameters, users can refer to [the orginal LSODE descriptions](https://ntrs.nasa.gov/citations/19940030753).
+For more detailed description and meaning of these parameters, users can refer to javadoc at [this page](https://imperial-qore.github.io/lsoda-java/javadoc/index.html) and [the original LSODE description](https://ntrs.nasa.gov/citations/19940030753).
