@@ -750,6 +750,7 @@ public class LSODA implements FirstOrderIntegrator{
                         illin = 0;
                         return;
                     }
+                    break;
                 case 5:
                     if (itask == 5) {
                         tcrit = tmax;
@@ -765,7 +766,7 @@ public class LSODA implements FirstOrderIntegrator{
                         successReturn(ihit, tcrit, itask);
                         return;
                     }
-                    tnext = tn + h * (1 - 4 * ETA);
+                    tnext = tn + h * (1 + 4 * ETA);
                     if ((tnext - tcrit) * h <= 0.0)
                         break;
                     h = (tcrit - tn) * (1 - 4 * ETA);

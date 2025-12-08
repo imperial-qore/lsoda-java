@@ -23,7 +23,7 @@ public class Utility {
 
             if (incx < 0)
                 ix = (-n+1) * incx + 1;
-            if (incx < 0)
+            if (incy < 0)
                 iy = (-n+1) * incy + 1;
 
             for(int i=1;i<=n;i++){
@@ -171,7 +171,7 @@ public class Utility {
             iy = ystart;
             if (incx < 0)
                 ix = (-n+1) * incx + xstart;
-            if (incx < 0)
+            if (incy < 0)
                 iy = (-n+1) * incy + ystart;
             for (int i=1; i<=n; i++){
                 dy[iy] += da * dx[ix];
