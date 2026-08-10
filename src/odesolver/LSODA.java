@@ -122,6 +122,10 @@ public class LSODA implements FirstOrderIntegrator{
     private Data recorder;
 
     private double relativeTol, absoluteTol;
+    // atol/rtol, the scale below which a solution component is negligible --
+    // NUMJAC's "threshold". Set from the tolerances of the current lsoda() call
+    // and used to floor the finite-difference increment in prja.
+    private double jacThreshold = 1.0;
 
     // for output
     private ArrayList<Double> tvec;
@@ -165,6 +169,19 @@ public class LSODA implements FirstOrderIntegrator{
             yj = y[j];
             // formula 3.35 in Description and Use of LSODE
             r = Math.max(sqrteta * Math.abs(yj), r0 / ewt[j]);
+            // ODEPACK's only guard on a degenerate increment is the
+            // "if (r0 == 0) r0 = 1" above, which tests for an EXACT zero.
+            // Started at or near a fixed point, ||f|| is at roundoff rather than
+            // zero, so r0 underflows to ~1e-27 instead of tripping that guard,
+            // and any coordinate with y_j = 0 (or |y_j| ~ 1e-9) is differenced
+            // with an increment of 1e-31..1e-17. The resulting column is
+            // rounding noise divided by that increment -- entries of order 1e15
+            // -- so the Newton matrix is meaningless, the corrector diverges
+            // (crate ~ 1e3), h collapses by 0.25 per failure and the step count
+            // explodes. Flooring r at MATLAB NUMJAC's increment,
+            // sqrt(eps)*max(|y_j|, atol/rtol), is what keeps ode15s off this
+            // failure mode.
+            r = Math.max(r, sqrteta * Math.max(Math.abs(yj), jacThreshold));
             y[j] += r;
             fac = -hl0 / r; // -h*b_0/delta Y
             acor = FirstOrderSystem(y, tn);  // f(y + delta y)
@@ -448,6 +465,30 @@ public class LSODA implements FirstOrderIntegrator{
             if (itol < 1 || itol > 4) {
                 terminate();
                 throw new IllegalInputException("itol", itol);
+            }
+
+            // NUMJAC's threshold, atol/rtol, for the Jacobian increment floor in
+            // prja. Taken from the tolerances of THIS call rather than from the
+            // constructor, which some callers populate in the opposite order.
+            // The largest atol over the smallest rtol is the conservative choice
+            // when either is supplied per component.
+            {
+                double atMax = atol[1];
+                if (itol == 2 || itol == 4) {
+                    for (int i = 2; i <= neq; i++) {
+                        atMax = Math.max(atMax, atol[i]);
+                    }
+                }
+                double rtMin = rtol[1];
+                if (itol > 2) {
+                    for (int i = 2; i <= neq; i++) {
+                        rtMin = Math.min(rtMin, rtol[i]);
+                    }
+                }
+                jacThreshold = (rtMin > 0.0) ? atMax / rtMin : atMax;
+                if (!(jacThreshold > 0.0) || Double.isInfinite(jacThreshold)) {
+                    jacThreshold = 0.0; // no usable scale: keep ODEPACK's increment
+                }
             }
 
             if (iopt < 0 || iopt > 1) {
